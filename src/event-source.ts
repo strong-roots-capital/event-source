@@ -3,24 +3,42 @@
  * Reduction of an EventEmitter to a composable event-stream
  */
 
+// TODO: strict-ify types with generics and StrictEventEmitter
+
 namespace debug {
-    export const es = require('debug')('eventsource')
+    export const es = require('debug')('event-source')
 }
 
 import { EventEmitter } from 'events'
 
 export const DEFAULT_EVENT = 'event'
 
-// todo: strict-ify with generics and StrictEventEmitter
+/**
+ * Sub-class of EventEmitter that emits a generic event (`event`) in
+ * addition to ordinary events.
+ *
+ * Provides abstractions for logically-transforming EventSources.
+ */
 export class EventSource extends EventEmitter {
-    /* Spec to be later overwritten */
     /**
-     * Typed specification to provide room in the prototype to save `EventEmitter.prototype.emit`
+     * Typed specification to provide room in the prototype to save
+     * `EventEmitter.prototype.emit`.
+     *
+     * @remarks
+     * This function is not to be used externally.
      */
     originalEmit = (event: string | symbol, ...args: any[]): boolean => false
 
     /**
-     * DOCUMENT
+     * Merge two EventSources into a single EventSource that acts as
+     * the logical summation of its two components.
+     *
+     * @remarks
+     * The new EventSource will emit when either `this` or `that`
+     * emits, and the emitted signal will contain the same arguments.
+     *
+     * @param that - EventSource to merge with `this`
+     * @returns A new EventSource acting as the summation of `this` and `that`
      */
     merge(that: EventSource): EventSource {
         const merged = new EventSource
@@ -37,9 +55,15 @@ export class EventSource extends EventEmitter {
     }
 
     /**
-     * DOCUMENT
+     * Returns a new EventSource that forwards signals emiited from
+     * `this`, only transformed according to mapping function
+     * `transform`.
+     *
+     * @param transform - EventSource with transformed signals
+     * @returns A new EventSource with transform applied to every signal
      */
     map(transform: Function): EventSource {
+        // TODO: use ow to reject non-function transforms
         const mapped = new EventSource
 
         const callback = (event: symbol | string, ...args: any[]): boolean => {
