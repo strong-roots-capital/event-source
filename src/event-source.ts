@@ -63,7 +63,6 @@ export class EventSource extends EventEmitter {
      * @returns A new EventSource with transform applied to every signal
      */
     map(transform: Function): EventSource {
-        // TODO: use ow to reject non-function transforms
         const mapped = new EventSource
 
         const callback = (event: symbol | string, ...args: any[]): boolean => {
