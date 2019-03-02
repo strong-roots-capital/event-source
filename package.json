@@ -1,6 +1,6 @@
 {
   "name": "@strong-roots-capital/event-source",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Reduction of an EventEmitter to a composable event-stream",
   "main": "dist/event-source.js",
   "types": "dist/event-source.d.ts",
