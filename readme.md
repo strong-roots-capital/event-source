@@ -11,7 +11,7 @@ npm install @strong-roots-capital/event-source
 ## Use
 
 ``` typescript
-import eventSource from '@strong-roots-capital/event-source'
+import { eventSource } from '@strong-roots-capital/event-source'
 let a = new EventSource()
 let b = new EventSource()
 let es = a.merge(b.map((n: number) => 'I mapped this! ' + n))
